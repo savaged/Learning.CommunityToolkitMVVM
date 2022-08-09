@@ -1,0 +1,45 @@
+﻿<Window x:Class="CommunityToolkitMVVM.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CommunityToolkitMVVM.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Loaded="Window_Loaded">
+    <Grid Margin="10">
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Column="0" Margin="5"
+                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  ItemsSource="{Binding CustomersViewModel.Index}"
+                  SelectedItem="{Binding CustomerViewModel.SelectedItem}">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add" Command="{Binding CustomerViewModel.AddCmd}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First name" Binding="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Surname" Binding="{Binding Surname, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Column="1" Margin="5"
+                    Visibility="{Binding CustomerViewModel.IsItemSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <WrapPanel>
+                <Label Width="70">First name</Label>
+                <TextBox Width="160" Text="{Binding CustomerViewModel.SelectedItem.FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Width="70">Surname</Label>
+                <TextBox Width="160" Text="{Binding CustomerViewModel.SelectedItem.Surname, UpdateSourceTrigger=PropertyChanged}"/>
+            </WrapPanel>
+            <Button Width="70" Margin="5" Command="{Binding CustomerViewModel.SaveCmd}">Save</Button>
+        </StackPanel>
+    </Grid>
+</Window>
