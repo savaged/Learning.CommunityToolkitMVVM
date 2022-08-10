@@ -1,2 +1,2 @@
 # Learning.CommunityToolkitMVVM
-Fun learning how to use CommunityToolkit.MVVM
+Fun learning how to use CommunityToolkit.MVVM with WPF
