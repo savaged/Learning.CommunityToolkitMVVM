@@ -1,8 +1,7 @@
 ﻿using CommunityToolkitMVVM.Models;
 using CommunityToolkitMVVM.ViewModels;
+using CommunityToolkitMVVM.ViewModels.Messages;
 using NUnit.Framework;
-using System;
-using TechTalk.SpecFlow;
 
 namespace CommunityToolkitMVVM.SpecFlow.Support
 {
@@ -12,14 +11,32 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
         where TIndexAndSelectedItemViewModel
         : class, IIndexAndSelectedItemViewModel<TModel>
     {
+        private bool _isModelSaved;
+
         public IndexAndSelectedItemStepDefinitionBase()
         {
-            PopulateExistingModel();
+            _isModelSaved = true;
+            PopulateTemplateModel();
+            RegisterForModelSavedMessage();
         }
 
-        protected static TModel ExistingModel => new TModel { Id = 999 };
+        protected static TModel TemplateModel => new TModel();
 
-        protected abstract void PopulateExistingModel();
+        protected abstract void PopulateTemplateModel();
+
+        protected abstract void RegisterForModelSavedMessage();
+
+        protected void SaveSelectedItem()
+        {
+            PrepForModelSave();
+            SelectedItemViewModel!.SaveCmd.Execute(null);
+            WaitForModelSaveCompleted();
+        }
+
+        protected void OnCustomerSaved(ModelSavedMessage<TModel> m)
+        {
+            _isModelSaved = true;
+        }
 
         protected TIndexAndSelectedItemViewModel? IndexAndSelectedItemViewModel
         { get; set; }
@@ -86,6 +103,16 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
                     throw new InvalidOperationException(
                     $"{nameof(IndexAndSelectedItemViewModel)} is null. " +
                     "You likely forgot a setup step.");
+        }
+
+        private void PrepForModelSave() => _isModelSaved = false;
+
+        private void WaitForModelSaveCompleted()
+        {
+            while (!_isModelSaved)
+            {
+                Thread.Sleep(500);
+            }
         }
 
     }

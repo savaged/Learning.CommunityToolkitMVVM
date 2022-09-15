@@ -3,9 +3,11 @@ using CommunityToolkitMVVM.Models;
 
 namespace CommunityToolkitMVVM.ViewModels.Messages
 {
-    internal class CustomerSavedMessage : ValueChangedMessage<Customer>
+    public class ModelSavedMessage<T> : ValueChangedMessage<T>
+        where T : class, IModel
     {
-        public CustomerSavedMessage(SavedAction savedAction, Customer value) : base(value)
+        public ModelSavedMessage(SavedAction savedAction, T model)
+            : base(model)
         {
             SavedAction = savedAction;
         }
@@ -13,7 +15,7 @@ namespace CommunityToolkitMVVM.ViewModels.Messages
         public SavedAction SavedAction { get; }
     }
 
-    internal enum SavedAction
+    public enum SavedAction
     {
         _,
         Inserted,

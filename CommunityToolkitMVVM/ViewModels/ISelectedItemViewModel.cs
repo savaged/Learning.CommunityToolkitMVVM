@@ -10,7 +10,7 @@ namespace CommunityToolkitMVVM.ViewModels
         bool CanAdd { get; }
         bool CanSave { get; }
         bool IsItemSelected { get; }
-        IAsyncRelayCommand SaveCmd { get; }
+        IRelayCommand SaveCmd { get; }
         T? SelectedItem { get; set; }
     }
 }

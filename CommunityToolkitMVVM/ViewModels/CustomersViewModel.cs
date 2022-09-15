@@ -26,7 +26,7 @@ namespace CommunityToolkitMVVM.ViewModels
 
             _index = new List<Customer>();
 
-            WeakReferenceMessenger.Default.Register<CustomerSavedMessage>(
+            WeakReferenceMessenger.Default.Register<ModelSavedMessage<Customer>>(
                 this, (r, m) => OnCustomerSaved(m));
         }
 
@@ -37,7 +37,7 @@ namespace CommunityToolkitMVVM.ViewModels
             BusyStateService.UnregisterIsBusy(nameof(LoadAsync));
         }
 
-        private async void OnCustomerSaved(CustomerSavedMessage m)
+        private async void OnCustomerSaved(ModelSavedMessage<Customer> m)
         {
             if (m?.Value != null)
             {

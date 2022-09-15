@@ -1,10 +1,12 @@
 using CommunityToolkitMVVM.Models;
 using CommunityToolkitMVVM.ViewModels;
+using CommunityToolkitMVVM.ViewModels.Messages;
 using CommunityToolkitMVVM.SpecFlow.Support;
 using NUnit.Framework;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using TechTalk.SpecFlow;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
 {
@@ -18,10 +20,16 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
             IndexAndSelectedItemViewModel = serviceProvider?.GetService<MainViewModel>();
         }
 
-        protected override void PopulateExistingModel()
+        protected override void PopulateTemplateModel()
         {
-            ExistingModel.FirstName = "Vic";
-            ExistingModel.Surname = "Reeves";
+            TemplateModel.FirstName = "Vic";
+            TemplateModel.Surname = "Reeves";
+        }
+
+        protected override void RegisterForModelSavedMessage()
+        {
+            WeakReferenceMessenger.Default.Register<ModelSavedMessage<Customer>>(
+                this, (r, m) => OnCustomerSaved(m));
         }
 
         [Given(@"a new Customer")]
@@ -46,10 +54,10 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         }
 
         [When(@"I click Save")]
-        public async Task WhenIClickSave()
+        public void WhenIClickSave()
         {
             SelectedItemViewModelIsSetup();
-            await SelectedItemViewModel!.SaveCmd.ExecuteAsync(null);
+            SaveSelectedItem();
         }
 
         [Then(@"the Customer is saved")]
@@ -70,11 +78,11 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         }
 
         [Given(@"an exsiting Customer")]
-        public async Task GivenAnExsitingCustomer()
+        public void GivenAnExsitingCustomer()
         {
             SelectedItemViewModelIsSetup();
-            SelectedItemViewModel!.SelectedItem = ExistingModel;
-            await SelectedItemViewModel!.SaveCmd.ExecuteAsync(null);
+            SelectedItemViewModel!.SelectedItem = TemplateModel;
+            SaveSelectedItem();
         }
 
         [Given(@"the Customer is listed")]
@@ -82,7 +90,7 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         {
             IndexViewModelIsSetup();
             IndexIsSetup();
-            IndexViewModel!.Index!.Add(ExistingModel);
+            IndexViewModel!.Index!.Add(TemplateModel);
         }
 
         [When(@"I change the Customer Firstname to '(.*)'")]
@@ -98,5 +106,6 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
             SelectedItemIsSetup();
             SelectedItemViewModel!.SelectedItem!.Surname = surname;
         }
+
     }
 }

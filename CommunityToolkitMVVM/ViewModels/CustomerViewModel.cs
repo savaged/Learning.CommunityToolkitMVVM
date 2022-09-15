@@ -24,7 +24,7 @@ namespace CommunityToolkitMVVM.ViewModels
                 throw new ArgumentNullException(nameof(dataService));
 
             AddCmd = new RelayCommand(OnAdd, () => CanAdd);
-            SaveCmd = new AsyncRelayCommand(OnSave, () => CanSave);
+            SaveCmd = new RelayCommand(OnSave, () => CanSave);
         }
 
         public Customer? SelectedItem
@@ -51,7 +51,7 @@ namespace CommunityToolkitMVVM.ViewModels
 
         public IRelayCommand AddCmd { get; }
 
-        public IAsyncRelayCommand SaveCmd { get; }
+        public IRelayCommand SaveCmd { get; }
 
         public bool CanAdd => CanExecute;
 
@@ -66,7 +66,7 @@ namespace CommunityToolkitMVVM.ViewModels
             BusyStateService.UnregisterIsBusy(nameof(OnAdd));
         }
 
-        private async Task OnSave()
+        private async void OnSave()
         {
             BusyStateService.RegisterIsBusy(nameof(OnSave));
             if (SelectedItem != null)
@@ -83,7 +83,7 @@ namespace CommunityToolkitMVVM.ViewModels
                     savedAction = SavedAction.Updated;
                 }
                 WeakReferenceMessenger.Default.Send(
-                    new CustomerSavedMessage(savedAction, SelectedItem));
+                    new ModelSavedMessage<Customer>(savedAction, SelectedItem));
             }
             BusyStateService.UnregisterIsBusy(nameof(OnSave));
         }
