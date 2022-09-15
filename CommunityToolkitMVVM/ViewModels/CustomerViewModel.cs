@@ -71,15 +71,19 @@ namespace CommunityToolkitMVVM.ViewModels
             BusyStateService.RegisterIsBusy(nameof(OnSave));
             if (SelectedItem != null)
             {
+                var savedAction = SavedAction._;
                 if (SelectedItem.IsNullOrNew())
                 {
                     await _dataService.InsertAsync(SelectedItem);
+                    savedAction = SavedAction.Inserted;
                 }
                 else
                 {
                     await _dataService.UpdateAsync(SelectedItem);
+                    savedAction = SavedAction.Updated;
                 }
-                WeakReferenceMessenger.Default.Send(new CustomerSavedMessage(SelectedItem));
+                WeakReferenceMessenger.Default.Send(
+                    new CustomerSavedMessage(savedAction, SelectedItem));
             }
             BusyStateService.UnregisterIsBusy(nameof(OnSave));
         }

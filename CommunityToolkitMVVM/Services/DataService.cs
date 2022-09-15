@@ -25,23 +25,22 @@ namespace CommunityToolkitMVVM.Services
 
         public async Task<int> InsertAsync(T model)
         {
-            await EmulateAsynchronousRunning();
+            if (model == null) return 0;
 
+            await EmulateAsynchronousRunning();
             var id = _data.Count + 1;
             _data.Add(id, model);
+            model.Id = id;
             return id;
         }
 
         public async Task UpdateAsync(T model)
         {
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-            await EmulateAsynchronousRunning();
+            if (model == null) return;
 
             if (_data.ContainsKey(model.Id))
             {
+                await EmulateAsynchronousRunning();
                 _data[model.Id] = model;
             }
             else
@@ -52,10 +51,9 @@ namespace CommunityToolkitMVVM.Services
 
         public async Task DeleteAsync(int id)
         {
-            await EmulateAsynchronousRunning();
-
             if (_data.ContainsKey(id))
             {
+                await EmulateAsynchronousRunning();
                 _data.Remove(id);
             }
         }
@@ -63,7 +61,6 @@ namespace CommunityToolkitMVVM.Services
         public async Task<IList<T>> IndexAsync()
         {
             await EmulateAsynchronousRunning();
-
             return _data.Values.ToList();
         }
 

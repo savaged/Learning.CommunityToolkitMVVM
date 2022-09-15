@@ -4,6 +4,7 @@ using CommunityToolkitMVVM.Services;
 using CommunityToolkitMVVM.ViewModels.Messages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.ViewModels
@@ -37,7 +38,25 @@ namespace CommunityToolkitMVVM.ViewModels
 
         public async void OnCustomerSaved(CustomerSavedMessage m)
         {
-            await LoadAsync();
+            if (m?.Value != null)
+            {
+                var index = Index.ToList();
+                var match = index.FirstOrDefault(i => i.Id == m.Value.Id);
+                if (match != null)
+                {
+                    index.Remove(match);
+                }
+                else if (m.SavedAction == SavedAction.Deleted)
+                {
+                    index.Remove(m.Value);
+                }
+                index.Add(m.Value);
+                Index = index.ToList();
+            }
+            else
+            {
+                await LoadAsync();
+            }
         }
 
         public IList<Customer> Index

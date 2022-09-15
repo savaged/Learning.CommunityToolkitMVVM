@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace CommunityToolkitMVVM.Models
+﻿namespace CommunityToolkitMVVM.Models
 {
-    internal class Customer : ModelBase, IEquatable<Customer>
+    internal class Customer : ModelBase
     {
         private string _firstName = string.Empty;
         private string _surname = string.Empty;
@@ -19,22 +17,5 @@ namespace CommunityToolkitMVVM.Models
             set => SetProperty(ref _surname, value);
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as Customer);
-        }
-
-        public bool Equals(Customer? other)
-        {
-            return other != null &&
-                FirstName == other.FirstName &&
-                Surname == other.Surname;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(FirstName, Surname);
-        }
     }
-
 }

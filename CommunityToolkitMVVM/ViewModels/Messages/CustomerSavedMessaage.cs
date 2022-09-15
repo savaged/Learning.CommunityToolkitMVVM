@@ -5,9 +5,20 @@ namespace CommunityToolkitMVVM.ViewModels.Messages
 {
     internal class CustomerSavedMessage : ValueChangedMessage<Customer>
     {
-        public CustomerSavedMessage(Customer value) : base(value)
+        public CustomerSavedMessage(SavedAction savedAction, Customer value) : base(value)
         {
+            SavedAction = savedAction;
         }
+
+        public SavedAction SavedAction { get; }
+    }
+
+    internal enum SavedAction
+    {
+        _,
+        Inserted,
+        Updated,
+        Deleted
     }
 }
 
