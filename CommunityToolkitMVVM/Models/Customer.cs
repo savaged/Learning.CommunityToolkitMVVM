@@ -1,6 +1,6 @@
 ﻿namespace CommunityToolkitMVVM.Models
 {
-    internal class Customer : ModelBase
+    public class Customer : ModelBase
     {
         private string _firstName = string.Empty;
         private string _surname = string.Empty;

@@ -4,29 +4,30 @@ using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.ViewModels
 {
-    internal class MainViewModel : ViewModelBase, ILoadable
+    public class MainViewModel
+        : ViewModelBase, IIndexAndSelectedItemViewModel<Customer>
     {
         public MainViewModel(
             IBusyStateService busyStateService,
             IDataService<Customer> dataService)
             : base(busyStateService)
         {
-            CustomersViewModel =
+            IndexViewModel =
                 new CustomersViewModel(busyStateService, dataService);
-            CustomerViewModel =
+            SelectedItemViewModel =
                 new CustomerViewModel(busyStateService, dataService);
         }
 
         public async Task LoadAsync()
         {
             BusyStateService.RegisterIsBusy(nameof(LoadAsync));
-            await CustomersViewModel.LoadAsync();
+            await IndexViewModel.LoadAsync();
             BusyStateService.UnregisterIsBusy(nameof(LoadAsync));
         }
 
-        public CustomersViewModel CustomersViewModel { get; }
+        public IIndexViewModel<Customer> IndexViewModel { get; }
 
-        public CustomerViewModel CustomerViewModel { get; }
+        public ISelectedItemViewModel<Customer> SelectedItemViewModel { get; }
 
     }
 }

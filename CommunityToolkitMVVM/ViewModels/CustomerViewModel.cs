@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.ViewModels
 {
-    internal class CustomerViewModel : ViewModelBase
+    public class CustomerViewModel : ViewModelBase, ISelectedItemViewModel<Customer>
     {
         private readonly IDataService<Customer> _dataService;
         private Customer? _customer;

@@ -2,7 +2,7 @@
 
 namespace CommunityToolkitMVVM.Models
 {
-    internal abstract class ModelBase : ObservableObject, IModel
+    public abstract class ModelBase : ObservableObject, IModel
     {
         private int _id;
 

@@ -17,11 +17,11 @@
         </Grid.ColumnDefinitions>
         <DataGrid Grid.Column="0" Margin="5"
                   AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                  ItemsSource="{Binding CustomersViewModel.Index}"
-                  SelectedItem="{Binding CustomerViewModel.SelectedItem}">
+                  ItemsSource="{Binding IndexViewModel.Index}"
+                  SelectedItem="{Binding SelectedItemViewModel.SelectedItem}">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add" Command="{Binding CustomerViewModel.AddCmd}"/>
+                    <MenuItem Header="Add" Command="{Binding SelectedItemViewModel.AddCmd}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
@@ -30,16 +30,16 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Column="1" Margin="5"
-                    Visibility="{Binding CustomerViewModel.IsItemSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding SelectedItemViewModel.IsItemSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             <WrapPanel>
                 <Label Width="70">First name</Label>
-                <TextBox Width="160" Text="{Binding CustomerViewModel.SelectedItem.FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Width="160" Text="{Binding SelectedItemViewModel.SelectedItem.FirstName, UpdateSourceTrigger=PropertyChanged}"/>
             </WrapPanel>
             <WrapPanel>
                 <Label Width="70">Surname</Label>
-                <TextBox Width="160" Text="{Binding CustomerViewModel.SelectedItem.Surname, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Width="160" Text="{Binding SelectedItemViewModel.SelectedItem.Surname, UpdateSourceTrigger=PropertyChanged}"/>
             </WrapPanel>
-            <Button Width="70" Margin="5" IsDefault="True" Command="{Binding CustomerViewModel.SaveCmd}">Save</Button>
+            <Button Width="70" Margin="5" IsDefault="True" Command="{Binding SelectedItemViewModel.SaveCmd}">Save</Button>
         </StackPanel>
     </Grid>
 </Window>

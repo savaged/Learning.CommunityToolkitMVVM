@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.Services
 {
-    internal interface IDataService<T> where T : IModel, new()
+    public interface IDataService<T> where T : IModel, new()
     {
         Task<T> CreateAsync();
         Task<int> InsertAsync(T model);

@@ -7,7 +7,7 @@ namespace CommunityToolkitMVVM.Views
 {
     public partial class MainWindow : Window
     {
-        private IBusyStateManager _busyStateManager;
+        private IBusyStateManager? _busyStateManager;
 
         public MainWindow()
         {
@@ -32,7 +32,7 @@ namespace CommunityToolkitMVVM.Views
         {
             if (e.PropertyName == nameof(IBusyStateManager.IsBusy))
             {
-                Mouse.OverrideCursor = _busyStateManager.IsBusy ? Cursors.Wait : null;
+                Mouse.OverrideCursor = _busyStateManager?.IsBusy == true ? Cursors.Wait : null;
             }
         }
 

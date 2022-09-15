@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.ViewModels
 {
-    internal class CustomersViewModel : ViewModelBase, ILoadable
+    public class CustomersViewModel
+        : ViewModelBase, IIndexViewModel<Customer>
     {
         private readonly IDataService<Customer> _dataService;
 
@@ -36,7 +37,7 @@ namespace CommunityToolkitMVVM.ViewModels
             BusyStateService.UnregisterIsBusy(nameof(LoadAsync));
         }
 
-        public async void OnCustomerSaved(CustomerSavedMessage m)
+        private async void OnCustomerSaved(CustomerSavedMessage m)
         {
             if (m?.Value != null)
             {

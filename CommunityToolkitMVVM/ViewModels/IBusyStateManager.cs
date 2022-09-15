@@ -2,7 +2,7 @@
 
 namespace CommunityToolkitMVVM.ViewModels
 {
-    internal interface IBusyStateManager : INotifyPropertyChanged
+    public interface IBusyStateManager : INotifyPropertyChanged
     {
         bool IsBusy { get; }
         bool IsNotBusy { get; }

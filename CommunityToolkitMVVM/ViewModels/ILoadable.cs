@@ -2,7 +2,7 @@
 
 namespace CommunityToolkitMVVM.ViewModels
 {
-    internal interface ILoadable
+    public interface ILoadable
     {
         Task LoadAsync();
     }

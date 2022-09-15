@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace CommunityToolkitMVVM.ViewModels
 {
-    internal abstract class ViewModelBase : ObservableRecipient, IBusyStateManager
+    public abstract class ViewModelBase : ObservableRecipient, IBusyStateManager
     {
         protected IBusyStateService BusyStateService { get; }
 

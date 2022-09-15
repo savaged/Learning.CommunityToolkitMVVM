@@ -1,6 +1,6 @@
 ﻿namespace CommunityToolkitMVVM.Models
 {
-    internal interface IModel
+    public interface IModel
     {
         int Id { get; set; }
     }

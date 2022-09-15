@@ -1,6 +1,4 @@
-﻿using CommunityToolkitMVVM.Models;
-using CommunityToolkitMVVM.Services;
-using CommunityToolkitMVVM.ViewModels;
+﻿using CommunityToolkitMVVM.ViewModels;
 using CommunityToolkitMVVM.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -10,26 +8,15 @@ namespace CommunityToolkitMVVM
 {
     public partial class App : Application
     {
-        private IServiceProvider? _services;
-
-        private static IServiceProvider ConfigureServices()
-        {
-            var services = new ServiceCollection();
-
-            services.AddSingleton<IBusyStateService, BusyStateService>();
-            services.AddSingleton<IDataService<Customer>, DataService<Customer>>();
-            services.AddTransient<MainViewModel>();
-
-            return services.BuildServiceProvider();
-        }
+        private IServiceProvider? _serviceProvider;
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            _services = ConfigureServices();
+            _serviceProvider = Bootstrapper.ConfigureServices();
 
             Current.MainWindow = new MainWindow
             {
-                DataContext = _services?.GetService<MainViewModel>()
+                DataContext = _serviceProvider?.GetService<MainViewModel>()
             };
             Current.MainWindow.Show();
         }
