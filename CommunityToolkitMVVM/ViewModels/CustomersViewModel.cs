@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkitMVVM.Models;
 using CommunityToolkitMVVM.Services;
 using CommunityToolkitMVVM.ViewModels.Messages;
@@ -16,7 +14,10 @@ namespace CommunityToolkitMVVM.ViewModels
 
         private IList<Customer> _index;
 
-        public CustomersViewModel(IDataService<Customer> dataService)
+        public CustomersViewModel(
+            IBusyStateService busyStateService,
+            IDataService<Customer> dataService)
+            : base(busyStateService)
         {
             _dataService = dataService ??
                 throw new ArgumentNullException(nameof(dataService));
@@ -29,7 +30,9 @@ namespace CommunityToolkitMVVM.ViewModels
 
         public async Task LoadAsync()
         {
+            BusyStateService.RegisterIsBusy(nameof(LoadAsync));
             Index = await _dataService.IndexAsync();
+            BusyStateService.UnregisterIsBusy(nameof(LoadAsync));
         }
 
         public async void OnCustomerSaved(CustomerSavedMessage m)

@@ -67,9 +67,9 @@ namespace CommunityToolkitMVVM.Services
             return _data.Values.ToList();
         }
 
-        private Task EmulateAsynchronousRunning()
+        private async Task EmulateAsynchronousRunning()
         {
-            return Task.CompletedTask;
+            await Task.Delay(1000);
         }
 
     }

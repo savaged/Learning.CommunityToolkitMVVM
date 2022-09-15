@@ -6,6 +6,7 @@ using CommunityToolkitMVVM.Services;
 using CommunityToolkitMVVM.ViewModels.Messages;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.ViewModels
 {
@@ -14,13 +15,16 @@ namespace CommunityToolkitMVVM.ViewModels
         private readonly IDataService<Customer> _dataService;
         private Customer? _customer;
 
-        public CustomerViewModel(IDataService<Customer> dataService)
+        public CustomerViewModel(
+            IBusyStateService busyStateService,
+            IDataService<Customer> dataService)
+            : base(busyStateService)
         {
             _dataService = dataService ??
                 throw new ArgumentNullException(nameof(dataService));
 
             AddCmd = new RelayCommand(OnAdd, () => CanAdd);
-            SaveCmd = new RelayCommand(OnSave, () => CanSave);
+            SaveCmd = new AsyncRelayCommand(OnSave, () => CanSave);
         }
 
         public Customer? SelectedItem
@@ -47,7 +51,7 @@ namespace CommunityToolkitMVVM.ViewModels
 
         public IRelayCommand AddCmd { get; }
 
-        public IRelayCommand SaveCmd { get; }
+        public IAsyncRelayCommand SaveCmd { get; }
 
         public bool CanAdd => CanExecute;
 
@@ -57,11 +61,14 @@ namespace CommunityToolkitMVVM.ViewModels
 
         private async void OnAdd()
         {
+            BusyStateService.RegisterIsBusy(nameof(OnAdd));
             SelectedItem = await _dataService.CreateAsync();
+            BusyStateService.UnregisterIsBusy(nameof(OnAdd));
         }
 
-        private async void OnSave()
+        private async Task OnSave()
         {
+            BusyStateService.RegisterIsBusy(nameof(OnSave));
             if (SelectedItem != null)
             {
                 if (SelectedItem.IsNullOrNew())
@@ -74,6 +81,7 @@ namespace CommunityToolkitMVVM.ViewModels
                 }
                 WeakReferenceMessenger.Default.Send(new CustomerSavedMessage(SelectedItem));
             }
+            BusyStateService.UnregisterIsBusy(nameof(OnSave));
         }
 
         private void OnSelectedItemPropertyChanged(object? sender, PropertyChangedEventArgs e)

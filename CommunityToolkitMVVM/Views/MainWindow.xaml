@@ -39,7 +39,7 @@
                 <Label Width="70">Surname</Label>
                 <TextBox Width="160" Text="{Binding CustomerViewModel.SelectedItem.Surname, UpdateSourceTrigger=PropertyChanged}"/>
             </WrapPanel>
-            <Button Width="70" Margin="5" Command="{Binding CustomerViewModel.SaveCmd}">Save</Button>
+            <Button Width="70" Margin="5" IsDefault="True" Command="{Binding CustomerViewModel.SaveCmd}">Save</Button>
         </StackPanel>
     </Grid>
 </Window>

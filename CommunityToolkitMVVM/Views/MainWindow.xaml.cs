@@ -1,10 +1,14 @@
 ﻿using CommunityToolkitMVVM.ViewModels;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace CommunityToolkitMVVM.Views
 {
     public partial class MainWindow : Window
     {
+        private IBusyStateManager _busyStateManager;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -12,10 +16,25 @@ namespace CommunityToolkitMVVM.Views
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ILoadable vm)
+            if (DataContext is IBusyStateManager bsm)
             {
-                await vm.LoadAsync();
+                _busyStateManager = bsm;
+                _busyStateManager.PropertyChanged += OnBusyStateManagerPropertyChanged;
+            }
+            if (DataContext is ILoadable l)
+            {
+                await l.LoadAsync();
             }
         }
+
+        private void OnBusyStateManagerPropertyChanged(
+            object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IBusyStateManager.IsBusy))
+            {
+                Mouse.OverrideCursor = _busyStateManager.IsBusy ? Cursors.Wait : null;
+            }
+        }
+
     }
 }

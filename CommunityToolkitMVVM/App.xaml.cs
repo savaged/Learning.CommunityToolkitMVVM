@@ -16,6 +16,7 @@ namespace CommunityToolkitMVVM
         {
             var services = new ServiceCollection();
 
+            services.AddSingleton<IBusyStateService, BusyStateService>();
             services.AddSingleton<IDataService<Customer>, DataService<Customer>>();
             services.AddTransient<MainViewModel>();
 
