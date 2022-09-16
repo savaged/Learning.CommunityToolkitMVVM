@@ -19,7 +19,7 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             _isModelSaved = true;
             PopulateTemplateModel();
             WeakReferenceMessenger.Default.Register<ModelSavedMessage<TModel>>(
-                this, (r, m) => OnCustomerSaved(m));
+                this, (r, m) => OnModelSaved(m));
         }
 
         protected static TModel TemplateModel => new TModel();
