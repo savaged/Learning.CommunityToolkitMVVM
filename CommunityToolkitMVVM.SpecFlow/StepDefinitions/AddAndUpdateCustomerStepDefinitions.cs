@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using TechTalk.SpecFlow;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
 {
@@ -24,12 +23,6 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         {
             TemplateModel.FirstName = "Vic";
             TemplateModel.Surname = "Reeves";
-        }
-
-        protected override void RegisterForModelSavedMessage()
-        {
-            WeakReferenceMessenger.Default.Register<ModelSavedMessage<Customer>>(
-                this, (r, m) => OnCustomerSaved(m));
         }
 
         [Given(@"a new Customer")]

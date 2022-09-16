@@ -1,6 +1,7 @@
 ﻿using CommunityToolkitMVVM.Models;
 using CommunityToolkitMVVM.ViewModels;
 using CommunityToolkitMVVM.ViewModels.Messages;
+using CommunityToolkit.Mvvm.Messaging;
 using NUnit.Framework;
 
 namespace CommunityToolkitMVVM.SpecFlow.Support
@@ -17,14 +18,13 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
         {
             _isModelSaved = true;
             PopulateTemplateModel();
-            RegisterForModelSavedMessage();
+            WeakReferenceMessenger.Default.Register<ModelSavedMessage<Customer>>(
+                this, (r, m) => OnCustomerSaved(m));
         }
 
         protected static TModel TemplateModel => new TModel();
 
         protected abstract void PopulateTemplateModel();
-
-        protected abstract void RegisterForModelSavedMessage();
 
         protected void SaveSelectedItem()
         {
