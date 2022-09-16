@@ -18,7 +18,7 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
         {
             _isModelSaved = true;
             PopulateTemplateModel();
-            WeakReferenceMessenger.Default.Register<ModelSavedMessage<Customer>>(
+            WeakReferenceMessenger.Default.Register<ModelSavedMessage<TModel>>(
                 this, (r, m) => OnCustomerSaved(m));
         }
 
@@ -110,7 +110,7 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             }
         }
 
-        private void OnCustomerSaved(ModelSavedMessage<TModel> m)
+        private void OnModelSaved(ModelSavedMessage<TModel> m)
         {
             _isModelSaved = true;
         }
