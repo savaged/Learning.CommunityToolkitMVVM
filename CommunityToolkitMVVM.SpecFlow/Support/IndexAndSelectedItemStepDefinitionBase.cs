@@ -33,11 +33,6 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             WaitForModelSaveCompleted();
         }
 
-        protected void OnCustomerSaved(ModelSavedMessage<TModel> m)
-        {
-            _isModelSaved = true;
-        }
-
         protected TIndexAndSelectedItemViewModel? IndexAndSelectedItemViewModel
         { get; set; }
 
@@ -113,6 +108,11 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             {
                 Thread.Sleep(500);
             }
+        }
+
+        private void OnCustomerSaved(ModelSavedMessage<TModel> m)
+        {
+            _isModelSaved = true;
         }
 
     }
