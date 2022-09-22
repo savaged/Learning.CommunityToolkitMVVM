@@ -41,10 +41,10 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         }
 
         [When(@"I click Save")]
-        public void WhenIClickSave()
+        public async Task WhenIClickSave()
         {
             SelectedItemViewModelIsSetup();
-            SaveSelectedItem();
+            await SaveSelectedItem();
         }
 
         [Then(@"the Customer is listed")]
@@ -56,11 +56,11 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         }
 
         [Given(@"an exsiting Customer")]
-        public void GivenAnExsitingCustomer()
+        public async Task GivenAnExsitingCustomer()
         {
             SelectedItemViewModelIsSetup();
             SelectedItemViewModel!.SelectedItem = TemplateModel;
-            SaveSelectedItem();
+            await SaveSelectedItem();
             SelectedItemViewModel!.SelectedItem = ModelJustBeforeSaveAction;
         }
 
@@ -87,10 +87,10 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         }
 
         [When(@"I click Delete")]
-        public void WhenIClickDelete()
+        public async Task WhenIClickDelete()
         {
             SelectedItemViewModelIsSetup();
-            DeleteSelectedItem();
+            await DeleteSelectedItem();
         }
 
         [Then(@"the Customer is not listed")]

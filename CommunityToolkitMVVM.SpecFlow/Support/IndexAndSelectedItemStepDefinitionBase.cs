@@ -40,11 +40,11 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
 
         protected abstract void PopulateTemplateModel();
 
-        protected void SaveSelectedItem()
+        protected async Task SaveSelectedItem()
         {
             PrepForModelSave();
             SelectedItemViewModel!.SaveCmd.Execute(null);
-            WaitForModelSaveCompleted();
+            await WaitForModelSaveCompleted();
         }
 
         protected TIndexAndSelectedItemViewModel? IndexAndSelectedItemViewModel
@@ -108,11 +108,11 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             Assert.That(SelectedItemViewModel!.SelectedItem!.Id, Is.GreaterThan(0));
         }
 
-        protected void DeleteSelectedItem()
+        protected async Task DeleteSelectedItem()
         {
             PrepForModelSave();
             SelectedItemViewModel!.DeleteCmd.Execute(null);
-            WaitForModelSaveCompleted();
+            await WaitForModelSaveCompleted();
         }
 
         protected void AssertSelectedItemIsNull()
@@ -135,11 +135,11 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             _isModelSaved = false;
         }
 
-        private void WaitForModelSaveCompleted()
+        private async Task WaitForModelSaveCompleted()
         {
             while (!_isModelSaved)
             {
-                Thread.Sleep(500);
+                await Task.Delay(500);
             }
         }
 
