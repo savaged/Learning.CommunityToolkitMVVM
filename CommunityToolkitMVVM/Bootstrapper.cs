@@ -6,18 +6,23 @@ using System;
 
 namespace CommunityToolkitMVVM
 {
-    public static class Bootstrapper
+    public class Bootstrapper
     {
-        public static IServiceProvider ConfigureServices()
+        public Bootstrapper()
         {
-            var services = new ServiceCollection();
-
-            services.AddSingleton<IBusyStateService, BusyStateService>();
-            services.AddSingleton<IDataService<Customer>, DataService<Customer>>();
-            services.AddSingleton<ISystemDialogService, SystemDialogService>();
-            services.AddTransient<MainViewModel>();
-
-            return services.BuildServiceProvider();
+            Services = new ServiceCollection();
         }
+
+        public virtual IServiceProvider ConfigureServices()
+        {
+            Services.AddSingleton<IBusyStateService, BusyStateService>();
+            Services.AddSingleton<IDataService<Customer>, DataService<Customer>>();
+            Services.AddSingleton<ISystemDialogService, SystemDialogService>();
+            Services.AddTransient<MainViewModel>();
+            return Services.BuildServiceProvider();
+        }
+
+        protected IServiceCollection Services { get; }
+
     }
 }

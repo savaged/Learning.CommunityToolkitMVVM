@@ -13,12 +13,6 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
     public class AddAndUpdateCustomerStepDefinitions
         : IndexAndSelectedItemStepDefinitionBase<Customer, MainViewModel>
     {
-        public AddAndUpdateCustomerStepDefinitions() : base()
-        {
-            IServiceProvider? serviceProvider = Bootstrapper.ConfigureServices();
-            IndexAndSelectedItemViewModel = serviceProvider?.GetService<MainViewModel>();
-        }
-
         protected override void PopulateTemplateModel()
         {
             TemplateModel.FirstName = "Vic";

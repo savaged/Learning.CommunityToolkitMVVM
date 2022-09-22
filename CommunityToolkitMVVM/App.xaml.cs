@@ -12,7 +12,7 @@ namespace CommunityToolkitMVVM
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            _serviceProvider = Bootstrapper.ConfigureServices();
+            _serviceProvider = new Bootstrapper().ConfigureServices();
 
             Current.MainWindow = new MainWindow
             {

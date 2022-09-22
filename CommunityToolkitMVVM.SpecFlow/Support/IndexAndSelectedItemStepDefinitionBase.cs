@@ -3,6 +3,8 @@ using CommunityToolkitMVVM.ViewModels;
 using CommunityToolkitMVVM.ViewModels.Messages;
 using CommunityToolkit.Mvvm.Messaging;
 using NUnit.Framework;
+using Microsoft.Extensions.DependencyInjection;
+using CommunityToolkitMVVM.Services;
 
 namespace CommunityToolkitMVVM.SpecFlow.Support
 {
@@ -12,10 +14,20 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
         where TIndexAndSelectedItemViewModel
         : class, IIndexAndSelectedItemViewModel<TModel>
     {
+        private readonly IServiceProvider _serviceProvider;
         private bool _isModelSaved;
 
         public IndexAndSelectedItemStepDefinitionBase()
         {
+            _serviceProvider = new TestingBootstrapper().ConfigureServices();
+            IndexAndSelectedItemViewModel =
+                _serviceProvider.GetService<MainViewModel>() as TIndexAndSelectedItemViewModel;
+
+            var fakeSystemDialogService =
+                _serviceProvider.GetService<ISystemDialogService>()
+                as FakeSystemDialogService;
+            fakeSystemDialogService?.Init((m) => MessageBoxCaption = m);
+
             _isModelSaved = true;
             PopulateTemplateModel();
             WeakReferenceMessenger.Default.Register<ModelSavedMessage<TModel>>(
@@ -41,6 +53,8 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
 
         protected ISelectedItemViewModel<TModel>? SelectedItemViewModel =>
             IndexAndSelectedItemViewModel?.SelectedItemViewModel;
+
+        protected string? MessageBoxCaption { get; set; }
 
         protected void IndexViewModelIsSetup()
         {
@@ -108,6 +122,11 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             {
                 Thread.Sleep(500);
             }
+        }
+
+        private void SetMessageBoxCaption(string msg)
+        {
+            MessageBoxCaption = msg;
         }
 
         private void OnModelSaved(ModelSavedMessage<TModel> m)

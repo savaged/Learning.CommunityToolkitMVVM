@@ -75,22 +75,19 @@ namespace CommunityToolkitMVVM.ViewModels
             BusyStateService.RegisterIsBusy(nameof(OnSave));
             if (SelectedItem != null)
             {
-                if (_systemDialogService.ShowConfirmation())
+                var savedAction = SavedAction._;
+                if (SelectedItem.IsNullOrNew())
                 {
-                    var savedAction = SavedAction._;
-                    if (SelectedItem.IsNullOrNew())
-                    {
-                        await _dataService.InsertAsync(SelectedItem);
-                        savedAction = SavedAction.Inserted;
-                    }
-                    else
-                    {
-                        await _dataService.UpdateAsync(SelectedItem);
-                        savedAction = SavedAction.Updated;
-                    }
-                    WeakReferenceMessenger.Default.Send(
-                        new ModelSavedMessage<Customer>(savedAction, SelectedItem));
+                    await _dataService.InsertAsync(SelectedItem);
+                    savedAction = SavedAction.Inserted;
                 }
+                else
+                {
+                    await _dataService.UpdateAsync(SelectedItem);
+                    savedAction = SavedAction.Updated;
+                }
+                WeakReferenceMessenger.Default.Send(
+                    new ModelSavedMessage<Customer>(savedAction, SelectedItem));
             }
             BusyStateService.UnregisterIsBusy(nameof(OnSave));
         }

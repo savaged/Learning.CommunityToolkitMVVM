@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.Services
 {
-    internal class DataService<T> : IDataService<T>
+    public class DataService<T> : IDataService<T>
         where T : IModel, new()
     {
         private readonly IDictionary<int, T> _data;
