@@ -8,8 +8,7 @@ Scenario: Add a Customer
     And the Customer Firstname is 'Vic'
     And the Customer Surname is 'Reeves'
     When I click Save
-    Then the Customer is saved
-    And the Customer is listed
+    Then the Customer is listed
 
 Scenario: Update an existing Customer
     Given an exsiting Customer
@@ -19,5 +18,12 @@ Scenario: Update an existing Customer
     When I change the Customer Firstname to 'Bob'
     And I change the Customer Surname to 'Mortimer'
     And I click Save
-    Then the Customer is saved
+    Then the Customer is listed
+
+Scenario: Delete an existing Customer
+    Given an exsiting Customer
     And the Customer is listed
+    And the Customer Firstname is 'Vic'
+    And the Customer Surname is 'Reeves'
+    When I click Delete
+    Then the Customer is not listed

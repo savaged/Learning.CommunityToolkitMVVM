@@ -47,21 +47,12 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
             SaveSelectedItem();
         }
 
-        [Then(@"the Customer is saved")]
-        public void ThenTheCustomerIsSaved()
-        {
-            SelectedItemViewModelIsSetup();
-            AssertSelectedItemIsNotNull();
-            AssertSelectedItemIsNotNew();
-        }
-
         [Then(@"the Customer is listed")]
         public void ThenTheCustomerIsListed()
         {
             IndexViewModelIsSetup();
             AssertIndexIsNotNull();
-            AssertSelectedItemIsNotNull();
-            Assert.That(IndexViewModel!.Index!.Contains(SelectedItemViewModel!.SelectedItem!));
+            Assert.That(IndexViewModel!.Index!.Contains(ModelJustBeforeSaveAction!));
         }
 
         [Given(@"an exsiting Customer")]
@@ -70,6 +61,7 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
             SelectedItemViewModelIsSetup();
             SelectedItemViewModel!.SelectedItem = TemplateModel;
             SaveSelectedItem();
+            SelectedItemViewModel!.SelectedItem = ModelJustBeforeSaveAction;
         }
 
         [Given(@"the Customer is listed")]
@@ -92,6 +84,21 @@ namespace CommunityToolkitMVVM.SpecFlow.StepDefinitions
         {
             SelectedItemIsSetup();
             SelectedItemViewModel!.SelectedItem!.Surname = surname;
+        }
+
+        [When(@"I click Delete")]
+        public void WhenIClickDelete()
+        {
+            SelectedItemViewModelIsSetup();
+            DeleteSelectedItem();
+        }
+
+        [Then(@"the Customer is not listed")]
+        public void ThenTheCustomerIsNotListed()
+        {
+            IndexViewModelIsSetup();
+            AssertIndexIsNotNull();
+            Assert.That(IndexViewModel!.Index!.Contains(ModelJustBeforeSaveAction!), Is.False);
         }
 
     }

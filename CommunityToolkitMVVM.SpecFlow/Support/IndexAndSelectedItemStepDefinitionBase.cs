@@ -36,6 +36,8 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
 
         protected static TModel TemplateModel => new TModel();
 
+        protected TModel? ModelJustBeforeSaveAction { get; private set; }
+
         protected abstract void PopulateTemplateModel();
 
         protected void SaveSelectedItem()
@@ -106,15 +108,32 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             Assert.That(SelectedItemViewModel!.SelectedItem!.Id, Is.GreaterThan(0));
         }
 
+        protected void DeleteSelectedItem()
+        {
+            PrepForModelSave();
+            SelectedItemViewModel!.DeleteCmd.Execute(null);
+            WaitForModelSaveCompleted();
+        }
+
+        protected void AssertSelectedItemIsNull()
+        {
+            Assert.That(SelectedItemViewModel, Is.Null);
+        }
+
         private void IndexAndSelectedItemViewModelIsSetup()
         {
             if (IndexAndSelectedItemViewModel == null)
-                    throw new InvalidOperationException(
+                throw new InvalidOperationException(
                     $"{nameof(IndexAndSelectedItemViewModel)} is null. " +
                     "You likely forgot a setup step.");
         }
 
-        private void PrepForModelSave() => _isModelSaved = false;
+        private void PrepForModelSave()
+        {
+            SelectedItemIsSetup();
+            ModelJustBeforeSaveAction = SelectedItemViewModel!.SelectedItem!;
+            _isModelSaved = false;
+        }
 
         private void WaitForModelSaveCompleted()
         {
