@@ -124,11 +124,6 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             }
         }
 
-        private void SetMessageBoxCaption(string msg)
-        {
-            MessageBoxCaption = msg;
-        }
-
         private void OnModelSaved(ModelSavedMessage<TModel> m)
         {
             _isModelSaved = true;

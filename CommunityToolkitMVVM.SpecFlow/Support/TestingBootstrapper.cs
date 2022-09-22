@@ -13,8 +13,7 @@ namespace CommunityToolkitMVVM.SpecFlow.Support
             Services.AddSingleton<IDataService<Customer>, DataService<Customer>>();
             Services.AddSingleton<ISystemDialogService, FakeSystemDialogService>();
             Services.AddTransient<MainViewModel>();
-            var serviceProvider = Services.BuildServiceProvider();
-            return serviceProvider;
+            return Services.BuildServiceProvider();
         }
 
     }
