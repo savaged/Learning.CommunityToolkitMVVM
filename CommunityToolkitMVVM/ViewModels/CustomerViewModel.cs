@@ -29,6 +29,7 @@ namespace CommunityToolkitMVVM.ViewModels
 
             AddCmd = new RelayCommand(OnAdd, () => CanAdd);
             SaveCmd = new RelayCommand(OnSave, () => CanSave);
+            DeleteCmd = new RelayCommand(OnDelete, () => CanDelete);
         }
 
         public Customer? SelectedItem
@@ -57,9 +58,13 @@ namespace CommunityToolkitMVVM.ViewModels
 
         public IRelayCommand SaveCmd { get; }
 
+        public IRelayCommand DeleteCmd { get; }
+
         public bool CanAdd => CanExecute;
 
         public bool CanSave => CanExecute && IsValidCustomer;
+
+        public bool CanDelete => CanExecute && IsValidCustomer;
 
         private bool IsValidCustomer => SelectedItem.IsValid();
 
@@ -88,8 +93,24 @@ namespace CommunityToolkitMVVM.ViewModels
                 }
                 WeakReferenceMessenger.Default.Send(
                     new ModelSavedMessage<Customer>(savedAction, SelectedItem));
+                SelectedItem = null;
             }
             BusyStateService.UnregisterIsBusy(nameof(OnSave));
+        }
+
+        private async void OnDelete()
+        {
+            BusyStateService.RegisterIsBusy(nameof(OnDelete));
+            if (SelectedItem != null)
+            {
+                if (_systemDialogService.ShowConfirmation())
+                {
+                    await _dataService.DeleteAsync(SelectedItem.Id);
+                    WeakReferenceMessenger.Default.Send(
+                        new ModelSavedMessage<Customer>(SavedAction.Deleted, SelectedItem));
+                }
+            }
+            BusyStateService.UnregisterIsBusy(nameof(OnDelete));
         }
 
         private void OnSelectedItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -98,6 +119,7 @@ namespace CommunityToolkitMVVM.ViewModels
                 e.PropertyName == nameof(Customer.Surname))
             {
                 SaveCmd.NotifyCanExecuteChanged();
+                DeleteCmd.NotifyCanExecuteChanged();
             }
         }
 

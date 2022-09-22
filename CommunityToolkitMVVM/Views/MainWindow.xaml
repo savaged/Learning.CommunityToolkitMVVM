@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CommunityToolkitMVVM.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="450" Width="540"
         Loaded="Window_Loaded">
     <Grid Margin="10">
         <Grid.Resources>
@@ -39,7 +39,10 @@
                 <Label Width="70">Surname</Label>
                 <TextBox Width="160" Text="{Binding SelectedItemViewModel.SelectedItem.Surname, UpdateSourceTrigger=PropertyChanged}"/>
             </WrapPanel>
-            <Button Width="70" Margin="5" IsDefault="True" Command="{Binding SelectedItemViewModel.SaveCmd}">Save</Button>
+            <WrapPanel HorizontalAlignment="Right">
+                <Button Width="70" Margin="5" Command="{Binding SelectedItemViewModel.DeleteCmd}">Delete</Button>
+                <Button Width="70" Margin="5" IsDefault="True" Command="{Binding SelectedItemViewModel.SaveCmd}">Save</Button>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>

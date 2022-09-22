@@ -47,11 +47,10 @@ namespace CommunityToolkitMVVM.ViewModels
                 {
                     index.Remove(match);
                 }
-                else if (m.SavedAction == SavedAction.Deleted)
+                if (m.SavedAction != SavedAction.Deleted)
                 {
-                    index.Remove(m.Value);
+                    index.Add(m.Value);
                 }
-                index.Add(m.Value);
                 Index = index.ToList();
             }
             else

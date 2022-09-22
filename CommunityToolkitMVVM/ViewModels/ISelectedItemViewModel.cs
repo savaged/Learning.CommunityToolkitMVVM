@@ -11,6 +11,7 @@ namespace CommunityToolkitMVVM.ViewModels
         bool CanSave { get; }
         bool IsItemSelected { get; }
         IRelayCommand SaveCmd { get; }
+        IRelayCommand DeleteCmd { get; }
         T? SelectedItem { get; set; }
     }
 }
