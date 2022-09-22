@@ -6,22 +6,26 @@ using CommunityToolkitMVVM.Services;
 using CommunityToolkitMVVM.ViewModels.Messages;
 using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.ViewModels
 {
     public class CustomerViewModel : ViewModelBase, ISelectedItemViewModel<Customer>
     {
         private readonly IDataService<Customer> _dataService;
+        private readonly ISystemDialogService _systemDialogService;
         private Customer? _customer;
 
         public CustomerViewModel(
             IBusyStateService busyStateService,
-            IDataService<Customer> dataService)
+            IDataService<Customer> dataService,
+            ISystemDialogService systemDialogService)
             : base(busyStateService)
         {
             _dataService = dataService ??
                 throw new ArgumentNullException(nameof(dataService));
+
+            _systemDialogService = systemDialogService ??
+                throw new ArgumentNullException(nameof(systemDialogService));
 
             AddCmd = new RelayCommand(OnAdd, () => CanAdd);
             SaveCmd = new RelayCommand(OnSave, () => CanSave);
@@ -71,19 +75,22 @@ namespace CommunityToolkitMVVM.ViewModels
             BusyStateService.RegisterIsBusy(nameof(OnSave));
             if (SelectedItem != null)
             {
-                var savedAction = SavedAction._;
-                if (SelectedItem.IsNullOrNew())
+                if (_systemDialogService.ShowConfirmation())
                 {
-                    await _dataService.InsertAsync(SelectedItem);
-                    savedAction = SavedAction.Inserted;
+                    var savedAction = SavedAction._;
+                    if (SelectedItem.IsNullOrNew())
+                    {
+                        await _dataService.InsertAsync(SelectedItem);
+                        savedAction = SavedAction.Inserted;
+                    }
+                    else
+                    {
+                        await _dataService.UpdateAsync(SelectedItem);
+                        savedAction = SavedAction.Updated;
+                    }
+                    WeakReferenceMessenger.Default.Send(
+                        new ModelSavedMessage<Customer>(savedAction, SelectedItem));
                 }
-                else
-                {
-                    await _dataService.UpdateAsync(SelectedItem);
-                    savedAction = SavedAction.Updated;
-                }
-                WeakReferenceMessenger.Default.Send(
-                    new ModelSavedMessage<Customer>(savedAction, SelectedItem));
             }
             BusyStateService.UnregisterIsBusy(nameof(OnSave));
         }

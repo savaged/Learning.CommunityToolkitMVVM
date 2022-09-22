@@ -9,13 +9,14 @@ namespace CommunityToolkitMVVM.ViewModels
     {
         public MainViewModel(
             IBusyStateService busyStateService,
-            IDataService<Customer> dataService)
+            IDataService<Customer> dataService,
+            ISystemDialogService systemDialogService)
             : base(busyStateService)
         {
             IndexViewModel =
                 new CustomersViewModel(busyStateService, dataService);
-            SelectedItemViewModel =
-                new CustomerViewModel(busyStateService, dataService);
+            SelectedItemViewModel = new CustomerViewModel(
+                busyStateService, dataService, systemDialogService);
         }
 
         public async Task LoadAsync()

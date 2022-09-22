@@ -14,6 +14,7 @@ namespace CommunityToolkitMVVM
 
             services.AddSingleton<IBusyStateService, BusyStateService>();
             services.AddSingleton<IDataService<Customer>, DataService<Customer>>();
+            services.AddSingleton<ISystemDialogService, SystemDialogService>();
             services.AddTransient<MainViewModel>();
 
             return services.BuildServiceProvider();
