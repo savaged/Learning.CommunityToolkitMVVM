@@ -6,12 +6,12 @@ namespace CommunityToolkitMVVM.ViewModels
     public interface ISelectedItemViewModel<T>
         where T : class, IModel, new()
     {
-        IRelayCommand AddCmd { get; }
+        IAsyncRelayCommand AddCmd { get; }
         bool CanAdd { get; }
         bool CanSave { get; }
         bool IsItemSelected { get; }
-        IRelayCommand SaveCmd { get; }
-        IRelayCommand DeleteCmd { get; }
+        IAsyncRelayCommand SaveCmd { get; }
+        IAsyncRelayCommand DeleteCmd { get; }
         T? SelectedItem { get; set; }
     }
 }

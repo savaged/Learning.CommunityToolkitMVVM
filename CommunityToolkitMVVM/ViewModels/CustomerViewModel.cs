@@ -6,6 +6,7 @@ using CommunityToolkitMVVM.Services;
 using CommunityToolkitMVVM.ViewModels.Messages;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace CommunityToolkitMVVM.ViewModels
 {
@@ -27,9 +28,9 @@ namespace CommunityToolkitMVVM.ViewModels
             _systemDialogService = systemDialogService ??
                 throw new ArgumentNullException(nameof(systemDialogService));
 
-            AddCmd = new RelayCommand(OnAdd, () => CanAdd);
-            SaveCmd = new RelayCommand(OnSave, () => CanSave);
-            DeleteCmd = new RelayCommand(OnDelete, () => CanDelete);
+            AddCmd = new AsyncRelayCommand(OnAdd, () => CanAdd);
+            SaveCmd = new AsyncRelayCommand(OnSave, () => CanSave);
+            DeleteCmd = new AsyncRelayCommand(OnDelete, () => CanDelete);
         }
 
         public Customer? SelectedItem
@@ -54,11 +55,11 @@ namespace CommunityToolkitMVVM.ViewModels
 
         public bool IsItemSelected => SelectedItem != null;
 
-        public IRelayCommand AddCmd { get; }
+        public IAsyncRelayCommand AddCmd { get; }
 
-        public IRelayCommand SaveCmd { get; }
+        public IAsyncRelayCommand SaveCmd { get; }
 
-        public IRelayCommand DeleteCmd { get; }
+        public IAsyncRelayCommand DeleteCmd { get; }
 
         public bool CanAdd => CanExecute;
 
@@ -68,14 +69,14 @@ namespace CommunityToolkitMVVM.ViewModels
 
         private bool IsValidCustomer => SelectedItem.IsValid();
 
-        private async void OnAdd()
+        private async Task OnAdd()
         {
             BusyStateService.RegisterIsBusy(nameof(OnAdd));
             SelectedItem = await _dataService.CreateAsync();
             BusyStateService.UnregisterIsBusy(nameof(OnAdd));
         }
 
-        private async void OnSave()
+        private async Task OnSave()
         {
             BusyStateService.RegisterIsBusy(nameof(OnSave));
             if (SelectedItem != null)
@@ -98,7 +99,7 @@ namespace CommunityToolkitMVVM.ViewModels
             BusyStateService.UnregisterIsBusy(nameof(OnSave));
         }
 
-        private async void OnDelete()
+        private async Task OnDelete()
         {
             BusyStateService.RegisterIsBusy(nameof(OnDelete));
             if (SelectedItem != null)
