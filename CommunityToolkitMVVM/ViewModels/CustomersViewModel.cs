@@ -65,6 +65,5 @@ namespace CommunityToolkitMVVM.ViewModels
             set => SetProperty(ref _index, value);
         }
 
-
     }
 }
